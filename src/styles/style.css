@@ -1,0 +1,278 @@
+@import url("https://fonts.googleapis.com/css2?family=Spartan:wght@700&display=swap");
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+*, *::after, *::before {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-family: "Spartan", sans-serif;
+  font-size: 32px;
+}
+
+.calculator {
+  width: calc(min(645px, 90vw));
+  height: 48.125rem;
+  color: white;
+}
+
+.calculator input {
+  margin: 0 0.25rem;
+  padding: 0;
+}
+
+.calculator label {
+  text-align: center;
+  font-size: 0.875rem;
+  margin-bottom: 0.3125rem;
+}
+
+.calculator .header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-size: 1.125rem;
+}
+
+.calculator .header .theme {
+  display: inherit;
+}
+
+.calculator .header .theme small {
+  text-transform: uppercase;
+  margin: auto;
+  padding-right: 1rem;
+}
+
+.calculator .header form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+}
+
+.calculator .header form > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
+}
+
+.calculator .header form .slider {
+  height: 1.5rem;
+  width: 4rem;
+  border-radius: 2rem;
+  position: absolute;
+  background: #182034;
+  bottom: -0.3rem;
+  opacity: 0.4;
+  pointer-events: none;
+  /*This is the key.*/
+}
+
+.calculator .result {
+  margin: 0.5rem 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 1rem;
+  border-radius: 0.625rem;
+  overflow: auto;
+}
+
+.calculator .result h1 {
+  margin: 0;
+}
+
+.calculator .numbers {
+  width: 100%;
+  height: 36.25rem;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 2rem;
+  padding: 2rem;
+  border-radius: 0.625rem;
+}
+
+.calculator .numbers .two {
+  grid-column: span 2;
+}
+
+.calculator .numbers button {
+  padding: 0;
+  height: 5rem;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 0.9375rem;
+  font-family: "Spartan", sans-serif;
+}
+
+.calculator .numbers .weird {
+  border: none;
+}
+
+.calculator .numbers .extra {
+  border: none;
+}
+
+.theme1-main {
+  background: #3a4764;
+  color: white;
+}
+
+.theme1-screen {
+  background: #182034;
+  color: white;
+}
+
+.theme1-toggle {
+  background: #232c43;
+}
+
+.theme1-text {
+  color: white;
+}
+
+.theme1-key {
+  color: #444b5a;
+  background: #eae3dc;
+  -webkit-box-shadow: 0 0.3125rem 0 #b4a597;
+          box-shadow: 0 0.3125rem 0 #b4a597;
+}
+
+.theme1-worded {
+  color: white;
+  background: #637097;
+  -webkit-box-shadow: 0 0.3125rem 0 #404e72;
+          box-shadow: 0 0.3125rem 0 #404e72;
+}
+
+.theme1-equals {
+  color: #444b5a;
+  background: #d03f2f;
+  -webkit-box-shadow: 0 0.3125rem 0 #93261a;
+          box-shadow: 0 0.3125rem 0 #93261a;
+}
+
+.theme2-main {
+  background: #e6e6e6;
+  color: #35352c;
+}
+
+.theme2-screen {
+  background: #ededed;
+  color: #35352c;
+}
+
+.theme2-toggle {
+  background: #d1cccc;
+}
+
+.theme2-text {
+  color: #35352c;
+}
+
+.theme2-key {
+  color: #35352c;
+  background: #e5e4e1;
+  -webkit-box-shadow: 0 0.3125rem 0 #a69d91;
+          box-shadow: 0 0.3125rem 0 #a69d91;
+}
+
+.theme2-worded {
+  color: white;
+  background: #377f86;
+  -webkit-box-shadow: 0 0.3125rem 0 #1b5f65;
+          box-shadow: 0 0.3125rem 0 #1b5f65;
+}
+
+.theme2-equals {
+  color: #1b2428;
+  background: #ca5502;
+  -webkit-box-shadow: 0 0.3125rem 0 #893901;
+          box-shadow: 0 0.3125rem 0 #893901;
+}
+
+.theme3-main {
+  background: #160628;
+  color: #ffe53d;
+}
+
+.theme3-screen {
+  background: #1d0934;
+  color: #ffe53d;
+}
+
+.theme3-toggle {
+  background: #1d0934;
+}
+
+.theme3-text {
+  color: #ffe53d;
+}
+
+.theme3-key {
+  color: #ffe53d;
+  background: #341c4f;
+  -webkit-box-shadow: 0 0.3125rem 0 #871c9c;
+          box-shadow: 0 0.3125rem 0 #871c9c;
+}
+
+.theme3-worded {
+  color: white;
+  background: #58077d;
+  -webkit-box-shadow: 0 0.3125rem 0 #bc15f4;
+          box-shadow: 0 0.3125rem 0 #bc15f4;
+}
+
+.theme3-equals {
+  color: #1b2428;
+  background: #00e0d1;
+  -webkit-box-shadow: 0 0.3125rem 0 #6cf9f2;
+          box-shadow: 0 0.3125rem 0 #6cf9f2;
+}
+
+@media (max-width: 37.5rem) {
+  .calculator .numbers {
+    gap: 0.2em;
+  }
+}
+/*# sourceMappingURL=style.css.map */

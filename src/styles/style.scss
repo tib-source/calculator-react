@@ -1,0 +1,208 @@
+@import "variables";
+@import "global";
+
+
+
+.calculator{
+    width: calc(min(645px, 90vw));
+    height: toRem(770);
+    color: $white;
+    input{
+        margin: 0 0.25rem;
+        padding: 0 ;
+    }
+    label{
+        text-align: center;
+        font-size: toRem(14);
+        margin-bottom: toRem(5);
+    }
+    .header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: toRem(18);
+
+        .theme{
+            display: inherit;
+
+            small{
+                text-transform: uppercase;
+                margin: auto;
+                padding-right: 1rem;
+            }
+        }
+        form{
+            display: flex;
+            position: relative;
+            >div{
+                display: flex;
+                flex-direction: column-reverse;
+            }
+            .slider{
+                height: 1.5rem;
+                width: 4rem;
+                border-radius: 2rem;
+                position: absolute;
+                background: $screenBgBlue;
+                bottom: -0.3rem;
+                opacity: 0.4;
+                pointer-events: none; /*This is the key.*/
+
+            }
+        }
+
+    }
+    .result{
+        margin: 0.5rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 1rem;
+        border-radius: toRem(10);
+        overflow: auto;
+        h1{
+            margin: 0;
+
+        }
+    }
+
+    .numbers{
+        width: 100%;
+        height: toRem(580);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 2rem;
+        padding: 2rem;
+        border-radius: toRem(10);
+        
+
+        .two{
+            grid-column: span 2;
+        }
+
+        button{
+            padding: 0;
+            height: 5rem;
+            font-size: toRem($font);
+            cursor: pointer;
+            border-radius: toRem(15);
+            font-family: $spartan;
+        }
+        .weird{
+            border: none;
+        }
+
+        .extra{
+            border: none;
+        }
+    }
+
+
+}
+
+
+.theme1{
+    &-main{
+        background: $mainBgBlue;
+        color: $white;
+    }
+    &-screen{
+        background: $screenBgBlue;
+        color: $white;
+
+    }
+    &-toggle{
+        background: $toggleBlue;
+    }
+    &-text{
+        color:$white;
+    }
+    &-key{
+        color: $textTheme1;
+        background: $keyBgLightOrange;
+        box-shadow: 0 toRem(5) 0 $keyShadowLightOrange;
+    }
+    &-worded{
+        color: $white;
+        background: $keyBackgroundT1;
+        box-shadow: 0 toRem(5) 0 $keyShadowT1;
+    }
+    &-equals{
+        color: $textTheme1;
+        background: $keyBgRed;
+        box-shadow: 0 toRem(5) 0 $keyShadowDarkRed;
+    }
+}
+.theme2{
+    &-main{
+        background: $mainGray;
+        color: $textTheme2;
+    }
+    &-screen{
+        background: $screenBgGray;
+        color: $textTheme2;
+
+    }
+    &-toggle{
+        background: $toggleGray;
+    }
+    &-text{
+        color:$textTheme2;
+    }
+    &-key{
+        color: $textTheme2;
+        background: $keyBgLightYellow;
+        box-shadow: 0 toRem(5) 0 $keyShadowLightYellow;
+    }
+    &-worded{
+        color: $white;
+        background: $keyBackgroundT2;
+        box-shadow: 0 toRem(5) 0 $keyShadowT2;
+    }
+    &-equals{
+        color: $darkBlueText;
+        background: $keyBgOrange;
+        box-shadow: 0 toRem(5) 0 $keyShadowOrange;
+    }
+}
+
+.theme3{
+    &-main{
+        background: $mainViolet;
+        color: $yellowText;
+    }
+    &-screen{
+        background: $screenBgViolet;
+        color: $yellowText;
+
+    }
+    &-toggle{
+        background: $toggleViolet;
+    }
+    &-text{
+        color:$yellowText;
+    }
+    &-key{
+        color: $yellowText;
+        background: $keyBgDarkMagenta;
+        box-shadow: 0 toRem(5) 0 $keyShadowDarkMagenta;
+    }
+    &-worded{
+        color: $white;
+        background: $keyBackgroundT3;
+        box-shadow: 0 toRem(5) 0 $keyShadowT3;
+    }
+    &-equals{
+        color: $darkBlueText;
+        background: $keyBackgorundCyan;
+        box-shadow: 0 toRem(5) 0 $keyShadowCyan;
+    }
+}
+
+@media (max-width:toRem(600)) {
+    .calculator{
+        .numbers{
+            gap: 0.2em;
+        }
+    }
+}
