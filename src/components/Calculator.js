@@ -1,172 +1,222 @@
-import React, { useEffect, useState } from "react";
+function Calculator({ setResult, result }) {
+  const operators = { add: "+", subtract: "-", divide: "/", multiply: "*" };
 
-function Calculator({ result, setResult }) {
-  let operators = { add: "+", minus: "-", divide: "/", multiply: "*" };
-
-  const [operatorUsed, setOperatorUsed] = useState(false);
-  const [firstNumber, setFirstNumber] = useState("");
-  const [operator, setOperator] = useState("");
-  const [secondNumber, setSecondNumber] = useState("");
-
+  let operatorUsed = false;
+  let firstNumber = "0";
+  let operator = "";
+  let secondNumber = "";
+  let firstDotUsed = false;
+  let secondDotUsed = false;
   function checkOperator(element) {
     return Object.keys(operators).includes(element.id);
   }
 
   function checkDot(element) {
-    return element.id == "dot";
+    return element.id === "decimal";
   }
 
   function updateResult() {
-    console.log(
-      `firstNumber: ${firstNumber}, operator: ${operator}, secondNumber: ${secondNumber}`
-    );
+    // console.log(
+    //   `firstNumber: ${typeof firstNumber}, operator: ${operator}, secondNumber: ${secondNumber}`
+    // );
+    // if (result.split("").length > 11) {
+    //   result.style.font_size = "1rem";
+    // }
     setResult(firstNumber + " " + operator + " " + secondNumber);
-    if (result.split("").length > 11) {
-      // result.style.font_size = "1rem";
-    }
   }
 
   function checkSpecial(element) {
-    let className = ["weird", "two"];
-    let count = 0;
-    className.forEach((name) => {
-      if (element.classList.contains(name)) {
-        count += 1;
-      }
-    });
-    return !count == 0;
+    return element.value === "special";
   }
 
   function reset() {
-    setOperatorUsed(false);
-    setFirstNumber("");
-    setOperator("");
-    setSecondNumber("");
+    operatorUsed = false;
+    firstNumber = "0";
+    operator = "";
+    secondNumber = "";
+    firstDotUsed = false;
+    secondDotUsed = false;
   }
 
   function evaluateSpecial(element) {
     let special = element.textContent;
     switch (special) {
       case "=":
-        let final = eval(result.textContent);
+        let final = eval(result());
+        console.log(final, result.textContent);
         setResult(final);
         reset();
-        setFirstNumber(final);
+        firstNumber = final;
+        if (!Number.isInteger(firstNumber)) {
+          firstDotUsed = true;
+        }
         updateResult();
         break;
-      case "RESET":
+      case "AC":
         reset();
         setResult("");
         updateResult();
 
         break;
-      case "DEL":
-        let text = result.textContent.split(" ").filter(Boolean);
-        let deleted;
+      // case "AC":
+      //   let text = result.textContent.split(" ").filter(Boolean);
+      //   let deleted;
 
-        if (text.length == 1) {
-          if (typeof parseInt(text[0]) == "number") {
-            deleted = text[0].split("");
-            deleted.pop();
-            setFirstNumber(deleted.join(""));
-          } else {
-            setFirstNumber("");
-          }
-          updateResult();
-        } else if (text.length == 3) {
-          if (typeof parseInt(text[2]) == "number") {
-            deleted = text[2].split("");
-            deleted.pop();
-            setSecondNumber(deleted.join(""));
-          } else {
-            setSecondNumber("");
-          }
-          updateResult();
-        } else if (text.length == 2) {
-          deleted = text[1].split("");
-          let done = deleted.pop();
-          if (Object.values(operators).includes(done)) {
-            setFirstNumber(firstNumber.trim());
-            setOperator("");
-            setSecondNumber("");
-            updateResult();
-          }
-        }
+      //   if (text.length === 1) {
+      //     if (typeof parseInt(text[0]) == "number") {
+      //       deleted = text[0].split("");
+      //       deleted.pop();
+      //       firstNumber = deleted.join("");
+      //     } else {
+      //       firstNumber = "";
+      //     }
+      //     updateResult();
+      //   } else if (text.length === 3) {
+      //     if (typeof parseInt(text[2]) == "number") {
+      //       deleted = text[2].split("");
+      //       deleted.pop();
+      //       secondNumber = deleted.join("");
+      //     } else {
+      //       secondNumber = "";
+      //     }
+      //     updateResult();
+      //   } else if (text.length === 2) {
+      //     deleted = text[1].split("");
+      //     let done = deleted.pop();
+      //     if (Object.values(operators).includes(done)) {
+      //       firstNumber = firstNumber.trim();
+      //       operator = "";
+      //       secondNumber = "";
+      //       updateResult();
+      //     }
+      //   }
+      //break;
+      default:
         break;
     }
   }
-  useEffect(() => {
-    const buttons = document.querySelectorAll("button");
-    buttons.forEach((element, index) => {
-      element.addEventListener("click", () => {
-        if (checkSpecial(element)) {
-          return evaluateSpecial(element);
-        } else if (checkOperator(element)) {
-          if (operatorUsed) {
-            setOperator("");
-          }
-          const op = operators[element.id];
-          setOperator(op);
-          setOperatorUsed(true);
-          console.log(operator, operatorUsed);
-          if (firstNumber == "") {
-            setFirstNumber("0");
-          }
-          return updateResult();
-        }
-        if (operatorUsed) {
-          setSecondNumber(element.innerText);
-          return updateResult();
+  const errors = [Infinity, undefined, NaN];
+  const handleButton = (element) => {
+    element = element.target;
+    if (checkSpecial(element)) {
+      return evaluateSpecial(element);
+    } else if (checkOperator(element)) {
+      if (operatorUsed) {
+        operator = "";
+      }
+      const op = operators[element.id];
+      operator = op;
+      operatorUsed = true;
+      console.log(operator, operatorUsed);
+      if (firstNumber === "") {
+        firstNumber = "0";
+      }
+      return updateResult();
+    }
+
+    if (operatorUsed) {
+      if (checkDot(element)) {
+        if (secondDotUsed) {
+          return null;
         } else {
-          setFirstNumber(element.innerText);
-          return updateResult();
+          secondDotUsed = true;
         }
-      });
-    });
-  }, []);
+      }
+      if (secondNumber === "0") {
+        secondNumber = element.innerText;
+        return updateResult();
+      }
+      secondNumber += element.innerText;
+      return updateResult();
+    } else {
+      if (
+        (firstNumber === "0" && !checkDot(element)) ||
+        errors.includes(firstNumber)
+      ) {
+        firstNumber = element.innerText;
+        return updateResult();
+      }
+      if (checkDot(element)) {
+        if (firstDotUsed) {
+          return null;
+        } else {
+          firstDotUsed = true;
+        }
+      }
+      firstNumber += element.innerText;
+      return updateResult();
+    }
+  };
 
   return (
     <>
       <div className="numbers">
-        <button>7</button>
-        <button>8</button>
-        <button>9</button>
-        <button className="weird" value="special">
-          DEL
+        <button onClick={handleButton} id="seven">
+          7
         </button>
-        <button>4</button>
-        <button>5</button>
-        <button>6</button>
-        <button className="operator" id="add">
+        <button onClick={handleButton} id="eight">
+          8
+        </button>
+        <button onClick={handleButton} id="nine">
+          9
+        </button>
+        <button
+          onClick={handleButton}
+          className="weird"
+          id="clear"
+          value="special"
+        >
+          AC
+        </button>
+        <button onClick={handleButton} id="four">
+          4
+        </button>
+        <button onClick={handleButton} id="five">
+          5
+        </button>
+        <button onClick={handleButton} id="six">
+          6
+        </button>
+        <button onClick={handleButton} className="operator" id="add">
           +
         </button>
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button className="operator" id="minus">
+        <button onClick={handleButton} id="one">
+          1
+        </button>
+        <button onClick={handleButton} id="two">
+          2
+        </button>
+        <button onClick={handleButton} id="three">
+          3
+        </button>
+        <button onClick={handleButton} className="operator" id="subtract">
           -
         </button>
-        <button className="operator" id="dot">
+        <button onClick={handleButton} className="operator" id="decimal">
           .
         </button>
-        <button>0</button>
-        <button className="operator" id="divide">
+        <button onClick={handleButton} id="zero">
+          0
+        </button>
+        <button onClick={handleButton} className="operator" id="divide">
           /
         </button>
-        <button className="operator" id="multiply">
+        <button onClick={handleButton} className="operator" id="multiply">
           x
         </button>
-        <button className="two weird" value="special">
-          RESET
-        </button>
-        <button className="two extra" id="equal" value="special">
+        <button
+          onClick={handleButton}
+          className="two extra"
+          id="equals"
+          value="special"
+        >
           =
         </button>
       </div>
 
       <div className="attribution">
         Challenge by{" "}
-        <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">
+        <a href="https://www.frontendmentor.io?ref=challenge">
           Frontend Mentor
         </a>
         . Coded by <a href="http://www.github.com/tib-source">tib-source</a>.

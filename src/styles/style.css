@@ -114,6 +114,7 @@ body {
   padding: 1rem;
   border-radius: 0.625rem;
   overflow: auto;
+  background-color: rebeccapurple;
 }
 
 .calculator .result h1 {
@@ -133,7 +134,7 @@ body {
 }
 
 .calculator .numbers .two {
-  grid-column: span 2;
+  grid-column: span 4;
 }
 
 .calculator .numbers button {
