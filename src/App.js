@@ -81,6 +81,7 @@ function App() {
   //     previousTheme = curr;
   //   }
   // }, []);
+  
   const result = useRef(null);
   const handleResult = (value) => {
     result.current.textContent = value;

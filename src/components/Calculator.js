@@ -1,12 +1,18 @@
 function Calculator({ setResult, result }) {
   const operators = { add: "+", subtract: "-", divide: "/", multiply: "*" };
 
-  let operatorUsed = false;
-  let firstNumber = "0";
+  // let operatorUsed = false;
+  // let firstNumber = "0";
+  // let operator = "";
+  // let secondNumber = "";
+  // let firstDotUsed = false;
+  // let secondDotUsed = false;
+
+  let current = "0";
+  let dotUsed = false;
   let operator = "";
-  let secondNumber = "";
-  let firstDotUsed = false;
-  let secondDotUsed = false;
+  let formula = [];
+
   function checkOperator(element) {
     return Object.keys(operators).includes(element.id);
   }
@@ -22,20 +28,27 @@ function Calculator({ setResult, result }) {
     // if (result.split("").length > 11) {
     //   result.style.font_size = "1rem";
     // }
-    setResult(firstNumber + " " + operator + " " + secondNumber);
+    // setResult(firstNumber + " " + operator + " " + secondNumber);
+    setResult(formula.join(" "));
   }
 
   function checkSpecial(element) {
     return element.value === "special";
   }
 
-  function reset() {
-    operatorUsed = false;
-    firstNumber = "0";
+  function reset(all = false) {
+    // operatorUsed = false;
+    // firstNumber = "0";
+    // operator = "";
+    // secondNumber = "";
+    // firstDotUsed = false;
+    // secondDotUsed = false;
+    current = "0";
+    dotUsed = false;
     operator = "";
-    secondNumber = "";
-    firstDotUsed = false;
-    secondDotUsed = false;
+    if (all) {
+      formula = [];
+    }
   }
 
   function evaluateSpecial(element) {
@@ -43,20 +56,20 @@ function Calculator({ setResult, result }) {
     switch (special) {
       case "=":
         let final = eval(result());
-        console.log(final, result.textContent);
         setResult(final);
-        reset();
-        firstNumber = final;
-        if (!Number.isInteger(firstNumber)) {
-          firstDotUsed = true;
+        reset(true); // resets everything
+        current = final;
+        if (!Number.isInteger(current)) {
+          dotUsed = true;
         }
+        formula.push(current);
         updateResult();
         break;
       case "AC":
-        reset();
+        reset(true);
         setResult("");
+        formula.push(current);
         updateResult();
-
         break;
       // case "AC":
       //   let text = result.textContent.split(" ").filter(Boolean);
@@ -95,57 +108,116 @@ function Calculator({ setResult, result }) {
         break;
     }
   }
+
+  const checkLastButton = () => {
+    const meow = [...formula].pop();
+    console.log("RUNNING");
+    return parseInt(meow);
+  };
   const errors = [Infinity, undefined, NaN];
   const handleButton = (element) => {
+    console.log(formula);
     element = element.target;
+    // Check if the button pressed is a special butotn
     if (checkSpecial(element)) {
       return evaluateSpecial(element);
-    } else if (checkOperator(element)) {
-      if (operatorUsed) {
-        operator = "";
+    }
+    // Check if the button pressed is an operator
+    else if (checkOperator(element)) {
+      // check if the current number is an empty string
+      if (current === "") {
+        current = "0";
       }
-      const op = operators[element.id];
-      operator = op;
-      operatorUsed = true;
-      console.log(operator, operatorUsed);
-      if (firstNumber === "") {
-        firstNumber = "0";
-      }
+      // append the numbers prior to the operator to the formula list
+      operator = element.innerText;
+      formula.push(operator);
+      reset(false); // resets everything except for the formula
       return updateResult();
     }
+    // if the button is a number
+    else {
+      // remove the default set 0
+      let cur = [...formula].pop();
+      if (cur === "0") {
+        formula.pop();
+      }
+      // check if current is 0 and overwrite
+      if (current === "0") {
+        current = element.innerText;
+        formula.push(current);
+        return updateResult();
+      } else {
+        current += element.innerText;
+        //Check if previous input was also a number and if so append current input to that
+        // Check if the button is a dot
+        if (checkLastButton()) {
+          let cur = formula.pop();
+          if (checkDot(element)) {
+            // Check if the demial has already been used
+            if (dotUsed) {
+              return null; // do nothing
+            } else {
+              dotUsed = true; // self explanatory
+              formula.push(current);
+              return updateResult();
+            }
+          }
+          formula.push(current);
+          updateResult();
+        } else {
+          formula.push(current);
+          return updateResult();
+        }
+      }
+    }
+    //   if (checkSpecial(element)) {
+    //     return evaluateSpecial(element);
+    //   } else if (checkOperator(element)) {
+    //     if (operatorUsed) {
+    //       operator = "";
+    //     }
+    //     const op = operators[element.id];
+    //     operator = op;
+    //     operatorUsed = true;
+    //     console.log(operator, operatorUsed);
+    //     if (firstNumber === "") {
+    //       firstNumber = "0";
+    //     }
+    //     return updateResult();
+    //   }
 
-    if (operatorUsed) {
-      if (checkDot(element)) {
-        if (secondDotUsed) {
-          return null;
-        } else {
-          secondDotUsed = true;
-        }
-      }
-      if (secondNumber === "0") {
-        secondNumber = element.innerText;
-        return updateResult();
-      }
-      secondNumber += element.innerText;
-      return updateResult();
-    } else {
-      if (
-        (firstNumber === "0" && !checkDot(element)) ||
-        errors.includes(firstNumber)
-      ) {
-        firstNumber = element.innerText;
-        return updateResult();
-      }
-      if (checkDot(element)) {
-        if (firstDotUsed) {
-          return null;
-        } else {
-          firstDotUsed = true;
-        }
-      }
-      firstNumber += element.innerText;
-      return updateResult();
-    }
+    //   if (operatorUsed) {
+    //     if (checkDot(element)) {
+    //       if (secondDotUsed) {
+    //         return null;
+    //       } else {
+    //         secondDotUsed = true;
+    //       }
+    //     }
+    //     if (secondNumber === "0") {
+    //       secondNumber = element.innerText;
+    //       return updateResult();
+    //     }
+    //     secondNumber += element.innerText;
+    //     return updateResult();
+    //   } else {
+    //     if (
+    //       (firstNumber === "0" && !checkDot(element)) ||
+    //       errors.includes(firstNumber)
+    //     ) {
+    //       firstNumber = element.innerText;
+    //       return updateResult();
+    //     }
+    //     if (checkDot(element)) {
+    //       if (firstDotUsed) {
+    //         return null;
+    //       } else {
+    //         firstDotUsed = true;
+    //       }
+    //     }
+    //     firstNumber += element.innerText;
+    //     return updateResult();
+    //   }
   };
 
   return (
