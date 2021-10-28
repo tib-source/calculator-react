@@ -274,7 +274,7 @@ function Calculator({ setResult, result }) {
           /
         </button>
         <button onClick={handleButton} className="operator" id="multiply">
-          x
+          *
         </button>
         <button
           onClick={handleButton}
