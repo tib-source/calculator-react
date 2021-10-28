@@ -14,7 +14,6 @@ function Calculator({ setResult, result }) {
   let dotUsed = false;
   let operator = "";
   let formula = [];
-  let negativeUsed = false;
 
   function checkOperator(element) {
     return Object.keys(operators).includes(element.id);
@@ -48,7 +47,6 @@ function Calculator({ setResult, result }) {
     current = "0";
     dotUsed = false;
     operator = "";
-    negativeUsed = false;
     if (all) {
       formula = [];
     }
@@ -134,7 +132,6 @@ function Calculator({ setResult, result }) {
     console.log("RUNNING");
     return parseInt(meow);
   };
-  const errors = [Infinity, undefined, NaN];
   const handleButton = (element) => {
     console.log(formula);
     element = element.target;
