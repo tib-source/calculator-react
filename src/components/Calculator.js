@@ -1,3 +1,5 @@
+import { findByPlaceholderText } from "@testing-library/react";
+
 function Calculator({ setResult, result }) {
   const operators = { add: "+", subtract: "-", divide: "/", multiply: "*" };
 
@@ -12,6 +14,7 @@ function Calculator({ setResult, result }) {
   let dotUsed = false;
   let operator = "";
   let formula = [];
+  let negativeUsed = false;
 
   function checkOperator(element) {
     return Object.keys(operators).includes(element.id);
@@ -31,7 +34,6 @@ function Calculator({ setResult, result }) {
     // setResult(firstNumber + " " + operator + " " + secondNumber);
     setResult(formula.join(" "));
   }
-
   function checkSpecial(element) {
     return element.value === "special";
   }
@@ -46,6 +48,7 @@ function Calculator({ setResult, result }) {
     current = "0";
     dotUsed = false;
     operator = "";
+    negativeUsed = false;
     if (all) {
       formula = [];
     }
@@ -108,7 +111,24 @@ function Calculator({ setResult, result }) {
         break;
     }
   }
-
+  // tried to implement recussion but failed LOL
+  // const getPreviousOperators = () => {
+  //   let copy = [...formula];
+  //   let ops = [];
+  //   function popper(list) {
+  //     let cur = list.pop();
+  //     if (typeof cur === "number") {
+  //       return null;
+  //     } else {
+  //       ops.push(cur);
+  //       popper(list);
+  //     }
+  //   }
+  //   try {
+  //     popper(copy);
+  //   } catch (e) {}
+  //   return ops;
+  // };
   const checkLastButton = () => {
     const meow = [...formula].pop();
     console.log("RUNNING");
@@ -128,8 +148,32 @@ function Calculator({ setResult, result }) {
       if (current === "") {
         current = "0";
       }
-      // append the numbers prior to the operator to the formula list
       operator = element.innerText;
+      // Check if the previous input is an operator
+      const prev = [...formula];
+      const prevOp = [...formula].pop();
+      if (Object.values(operators).includes(prevOp)) {
+        if (prevOp === "-") {
+          formula.pop();
+          const before = formula.pop();
+          if (!Object.values(operators).includes(before)) {
+            formula.push(before);
+          }
+          formula.push(operator);
+          reset(false); // resets everything except for the formula
+          return updateResult();
+        }
+        if (operator === "-") {
+          formula.push(operator);
+          reset(false); // resets everything except for the formula
+          return updateResult();
+        }
+        formula.pop();
+        formula.push(operator);
+        reset(false); // resets everything except for the formula
+        return updateResult();
+      }
+      // append the numbers prior to the operator to the formula list
       formula.push(operator);
       reset(false); // resets everything except for the formula
       return updateResult();
@@ -147,24 +191,28 @@ function Calculator({ setResult, result }) {
         formula.push(current);
         return updateResult();
       } else {
-        current += element.innerText;
         //Check if previous input was also a number and if so append current input to that
         // Check if the button is a dot
+        if (checkDot(element)) {
+          console.log(element, "its a dot");
+          // Check if the demial has already been used
+          if (dotUsed) {
+            return null; // do nothing
+          } else {
+            if (checkLastButton()) formula.pop();
+            current += element.innerText;
+            dotUsed = true; // self explanatory
+            formula.push(current);
+            return updateResult();
+          }
+        }
         if (checkLastButton()) {
           let cur = formula.pop();
-          if (checkDot(element)) {
-            // Check if the demial has already been used
-            if (dotUsed) {
-              return null; // do nothing
-            } else {
-              dotUsed = true; // self explanatory
-              formula.push(current);
-              return updateResult();
-            }
-          }
+          current += element.innerText;
           formula.push(current);
           updateResult();
         } else {
+          current += element.innerText;
           formula.push(current);
           return updateResult();
         }
